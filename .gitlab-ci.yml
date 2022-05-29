@@ -1,0 +1,30 @@
+stages:
+  - Build
+  - Package
+
+default:
+  image: debian:10
+
+Compile:
+  stage: Build
+  script:
+    - apt update && apt -y install maven
+    - mvn install && mvn package
+  artifacts:
+    paths:
+      - output/*.jar
+
+Package:
+  stage: Package
+  script:
+    - |
+      echo "Copying Includes Directory"
+      cp -R include/* output/
+    - |
+      echo "Creating Archive"
+      (
+        cd output && tar -zcvf ${CI_PROJECT_NAME}.tar.gz *
+      )
+  artifacts:
+    paths:
+      - output/*.tar.gz

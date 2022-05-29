@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+
+RUNTIME_USER=app
+APP_DIR=$(realpath "$(dirname "$(realpath "$0")")/..")
+
+exec chpst -u ${RUNTIME_USER} java -Duser.dir="${APP_DIR}" -jar "${APP_DIR}/service.jar" server "${APP_DIR}/config.yml"
